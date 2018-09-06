@@ -46,4 +46,10 @@ public class SpecificationServiceImpl implements ISpecificationService {
         List<SpecParam> specParamList = specParamMapper.selectByExample(example);
         return specParamList;
     }
+
+    @Override
+    public boolean saveSpecParam(SpecParam param) {
+
+        return specParamMapper.insertSelective(param) > 0;
+    }
 }

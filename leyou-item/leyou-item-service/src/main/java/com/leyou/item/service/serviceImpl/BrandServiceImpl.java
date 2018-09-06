@@ -108,4 +108,9 @@ public class BrandServiceImpl implements IBrandService {
         }
     }
 
+    @Override
+    public List<Brand> updateBrandByCid3(Long cid) {
+        return brandMapper.queryBrandListByCid(cid);
+    }
+
 }

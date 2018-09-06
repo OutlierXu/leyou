@@ -26,4 +26,10 @@ public interface ISpecificationService {
      * @return 参数列表信息集合List<SpecParam>
      */
     List<SpecParam> selectSpecParam(Long gid);
+
+    /**
+     * 新增规格参数
+     * @param param
+     */
+    boolean saveSpecParam(SpecParam param);
 }

@@ -49,11 +49,19 @@ public class SpecificationController {
     }
 
     @PostMapping("param")
-    public ResponseEntity<Void> saveUser(@RequestBody SpecParam Param){
+    public ResponseEntity<Void> saveSpecParam(@RequestBody SpecParam Param){
 
         System.out.println(Param);
 
-        return null;
+        boolean flag = specificationService.saveSpecParam(Param);
+        if(flag){
+
+            //返回新增成功状态码
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
     }
 
 

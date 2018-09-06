@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -73,5 +74,18 @@ public class BrandController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
+
+    @GetMapping("cid/{cid}")
+    public ResponseEntity<List<Brand>> updateBrandByCid3(@PathVariable("cid")Long cid){
+
+        List<Brand> brandList = this.brandService.updateBrandByCid3(cid);
+
+        if(!CollectionUtils.isEmpty(brandList)){
+            return ResponseEntity.ok(brandList);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
 
 }

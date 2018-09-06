@@ -32,4 +32,39 @@ public interface ISpecificationService {
      * @param param
      */
     boolean saveSpecParam(SpecParam param);
+
+    /**
+     * 更新规格参数
+     * @param param
+     * @return
+     */
+    boolean updateSpecParam(SpecParam param);
+
+    /**
+     * 删除规格参数
+     * @param id
+     * @return
+     */
+    boolean deleteSpecParam(long id);
+
+    /**
+     * 新增规格分组
+     * @param specGroup
+     * @return
+     */
+    boolean saveSpecGroup(SpecGroup specGroup);
+
+    /**
+     * 更新规格分组
+     * @param specGroup
+     * @return
+     */
+    boolean updateSpecGroup(SpecGroup specGroup);
+
+    /**
+     * 删除规格分组
+     * @param id
+     * @return
+     */
+    boolean deleteSpecGroup(long id);
 }

@@ -5,8 +5,11 @@ import com.leyou.item.mapper.ISpecParamMapper;
 import com.leyou.item.pojo.SpecGroup;
 import com.leyou.item.pojo.SpecParam;
 import com.leyou.item.service.ISpecificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.List;
  */
 @Service
 public class SpecificationServiceImpl implements ISpecificationService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpecificationServiceImpl.class);
 
     @Autowired
     private ISpecGroupMapper specGroupMapper;
@@ -52,4 +57,43 @@ public class SpecificationServiceImpl implements ISpecificationService {
 
         return specParamMapper.insertSelective(param) > 0;
     }
+
+    @Override
+    public boolean updateSpecParam(SpecParam param) {
+        return specParamMapper.updateByPrimaryKey(param) > 0;
+    }
+
+    @Override
+    public boolean deleteSpecParam(long id) {
+        return specParamMapper.deleteByPrimaryKey(id) > 0;
+    }
+
+    @Override
+    public boolean saveSpecGroup(SpecGroup specGroup) {
+
+        //先查询数据库是否含有该分组
+        Example example = new Example(specGroup.getClass());
+        example.createCriteria().andEqualTo("name", specGroup.getName());
+        List<SpecGroup> specGroupList = specGroupMapper.selectByExample(example);
+
+        if(!CollectionUtils.isEmpty(specGroupList)){
+            //查询空返回false
+            LOGGER.info("{}-分组参数已经存在!", specGroup.getName());
+            return false;
+        }
+
+        return specGroupMapper.insertSelective(specGroup) > 0;
+    }
+
+    @Override
+    public boolean updateSpecGroup(SpecGroup specGroup) {
+        return specGroupMapper.updateByPrimaryKey(specGroup) > 0;
+    }
+
+    @Override
+    public boolean deleteSpecGroup(long id) {
+        return specGroupMapper.deleteByPrimaryKey(id) > 0;
+    }
+
+
 }

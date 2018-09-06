@@ -61,7 +61,7 @@ public class BrandServiceImpl implements IBrandService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void saveBrand(Brand brand, List<Long> cids) {
 
         //新增品牌信息
@@ -74,7 +74,7 @@ public class BrandServiceImpl implements IBrandService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateBrand(Brand brand, List<Long> cids) {
 
         //更新對應id的brand信息
@@ -89,6 +89,23 @@ public class BrandServiceImpl implements IBrandService {
         }
         System.out.println("更新完畢！");
         return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteBrand(long id) {
+
+        //1.删除brand表的记录
+        brandMapper.deleteByPrimaryKey(id);
+
+        //2.查询brand_category下的對應id的记录
+        int i = brandMapper.selectCategoryBrand(id);
+
+        if (i > 0){
+            //3.删除brand_category表的對應id下的category信息
+            brandMapper.deleteCategoryBrandByBid(id);
+            System.out.println(id+" 删除成功!");
+        }
     }
 
 }

@@ -13,4 +13,10 @@ public interface IBrandService {
     void saveBrand(Brand brand, List<Long> cids);
 
     boolean updateBrand(Brand brand, List<Long> cids);
+
+    /**
+     * 根据id删除brand
+     * @param id
+     */
+    void deleteBrand(long id);
 }

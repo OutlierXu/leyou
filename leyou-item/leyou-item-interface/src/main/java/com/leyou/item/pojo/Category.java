@@ -18,6 +18,17 @@ public class Category {
     private Boolean isParent;
     private Integer sort;
 
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", parentId=" + parentId +
+                ", isParent=" + isParent +
+                ", sort=" + sort +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }

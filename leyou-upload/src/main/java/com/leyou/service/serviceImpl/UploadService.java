@@ -1,9 +1,13 @@
 package com.leyou.service.serviceImpl;
 
+import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.leyou.controller.UploadController;
 import com.leyou.service.IUploadService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +15,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.cert.Extension;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +32,9 @@ public class UploadService implements IUploadService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadController.class);
 
     private static final List<String> CONTENT_TYPE = Arrays.asList("image/png", "image/jpeg");
+
+    @Autowired
+    private FastFileStorageClient storageClient;
 
     @Override
     public String upload(MultipartFile file) {
@@ -53,11 +61,12 @@ public class UploadService implements IUploadService {
             }
 
             //2.保存图片
-            file.transferTo(new File("C:\\Users\\XuHao\\Desktop\\upload\\" + originalFilename));
+            String suffix = StringUtils.substringAfterLast(originalFilename, ".");
+            StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(), suffix, null);
 
             //3.拼接图片地址
-            String url = "http://image.leyou.com/upload/" + originalFilename;
-
+            String url = "http://image.leyou.com/" + storePath.getFullPath();
+            LOGGER.info("圖片上传成功，路徑：{}",url);
             return url;
 
         } catch (IOException e) {

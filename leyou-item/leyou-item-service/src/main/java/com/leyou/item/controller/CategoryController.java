@@ -64,6 +64,7 @@ public class CategoryController {
                 return ResponseEntity.notFound().build();
             }
 
+            System.out.println(categoryList);
             return ResponseEntity.ok(categoryList);
         } catch (Exception e) {
             e.printStackTrace();

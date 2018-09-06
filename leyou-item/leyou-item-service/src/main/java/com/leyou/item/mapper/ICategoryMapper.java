@@ -13,5 +13,6 @@ import java.util.List;
 @org.apache.ibatis.annotations.Mapper
 public interface ICategoryMapper extends Mapper<Category>{
 
+
     List<Category> queryCategoryListByBid(@Param("bid") Long bid);
 }

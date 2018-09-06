@@ -1,12 +1,14 @@
 package com.leyou.item.service.serviceImpl;
 
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.leyou.common.pojo.PageResult;
 import com.leyou.item.mapper.IBrandMapper;
 import com.leyou.item.pojo.Brand;
 import com.leyou.item.service.IBrandService;
+import com.sun.org.apache.xpath.internal.SourceTree;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ import java.util.List;
  * @author XuHao
  */
 @Service
-public class BrandService implements IBrandService {
+public class BrandServiceImpl implements IBrandService {
 
 
     @Autowired
@@ -71,5 +73,22 @@ public class BrandService implements IBrandService {
 
     }
 
+    @Override
+    @Transactional
+    public boolean updateBrand(Brand brand, List<Long> cids) {
+
+        //更新對應id的brand信息
+        brandMapper.updateByPrimaryKey(brand);
+
+        //刪除對應id下的category信息
+        brandMapper.deleteCategoryBrandByBid(brand.getId());
+
+        for (Long cid : cids) {
+            System.out.println(cid);
+            this.brandMapper.insertCategoryBrand(cid,brand.getId());
+        }
+        System.out.println("更新完畢！");
+        return true;
+    }
 
 }

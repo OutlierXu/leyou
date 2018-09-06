@@ -6,7 +6,7 @@
 
 	<!--List<Category> queryCategoryListByBid(@Param("bid") Long bid)-->
 	<select id="queryCategoryListByBid" resultType="com.leyou.item.pojo.Category">
-		SELECT c.`name`
+		SELECT c.*
 		FROM tb_category c LEFT JOIN tb_category_brand cb ON c.id = cb.category_id
 		JOIN tb_brand b ON cb.brand_id = b.id
 		WHERE b.id = #{bid}

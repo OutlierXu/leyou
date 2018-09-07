@@ -6,15 +6,14 @@ import com.leyou.common.pojo.PageResult;
 import com.leyou.item.mapper.*;
 import com.leyou.item.pojo.*;
 import com.leyou.item.service.IGoodsService;
-import com.netflix.discovery.converters.Auto;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -126,8 +125,68 @@ public class GoodsServiceImpl implements IGoodsService {
         return true;
     }
 
+    @Override
+    public Spu querySpuById(Long id) {
+        return spuMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Sku> querySkuListBySpuId(Long id) {
+        Example example = new Example(Sku.class);
+        example.createCriteria().andEqualTo("spuId", id);
+        List<Sku> skuList = skuMapper.selectByExample(example);
+        for (Sku sku : skuList) {
+            Stock stock = stockMapper.selectByPrimaryKey(sku.getId());
+            sku.setStock(stock.getStock());
+        }
+        return skuList;
+    }
+
+    @Override
+    public SpuDetail querySpuDetailById(Long id) {
+        return spuDetailMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    @Transactional
+    public Boolean updateGoods(SpuBo spuBo) {
+        //1.先刪除存在的sku表（因為1：n經過修改sku，之前存在的sku可能已經不存在了）
+        Long id = spuBo.getId();
+
+        deleteSkuAndStock(id);
+
+        //2.新增sku和庫存
+        this.saveSku(spuBo, id);
+
+        //3.更新spu
+        spuBo.setLastUpdateTime(new Date());
+        spuMapper.updateByPrimaryKeySelective(spuBo);
+
+        //4.更新spuDetail
+        spuDetailMapper.updateByPrimaryKeySelective(spuBo.getSpuDetail());
+
+
+        return true;
+    }
+
+
+    @Override
+    @Transactional
+    public Boolean deleteSpu(long id) {
+        //1.先刪除存在的sku表
+        deleteSkuAndStock(id);
+
+        //2.刪除spuDetail記錄
+        spuDetailMapper.deleteByPrimaryKey(id);
+
+        //3.刪除spu表
+        spuMapper.deleteByPrimaryKey(id);
+
+        return true;
+    }
+
     /**
-     * 保存sku
+     * 保存sku及對應庫存
      * @param spuBo
      * @param id 對應的SPU的id
      */
@@ -148,4 +207,26 @@ public class GoodsServiceImpl implements IGoodsService {
             stockMapper.insertSelective(stock);
         }
     }
+
+    /**
+     * 刪除sku及對應庫存
+     * @param id 對應的SPU的id
+     */
+    private void deleteSkuAndStock(Long id) {
+        Example example = new Example(Sku.class);
+        example.createCriteria().andEqualTo("spuId", id);
+        List<Sku> skuList = skuMapper.selectByExample(example);
+        if(!CollectionUtils.isEmpty(skuList)){
+
+            //刪除以前的庫存
+            List<Long> ids = skuList.stream().map(sku -> sku.getId()).collect(Collectors.toList());
+            Example stockExample = new Example(Stock.class);
+            stockExample.createCriteria().andIn("skuId", ids);
+            stockMapper.deleteByExample(stockExample);
+
+            //刪除以前的sku記錄
+            skuMapper.deleteByExample(example);
+        }
+    }
+
 }

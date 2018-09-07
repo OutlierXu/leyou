@@ -1,7 +1,12 @@
 package com.leyou.item.service;
 
 import com.leyou.common.pojo.PageResult;
+import com.leyou.item.pojo.Sku;
+import com.leyou.item.pojo.Spu;
 import com.leyou.item.pojo.SpuBo;
+import com.leyou.item.pojo.SpuDetail;
+
+import java.util.List;
 
 /**
  * @author XuHao
@@ -27,4 +32,39 @@ public interface IGoodsService {
      * @return
      */
     Boolean addGoods(SpuBo spuBo);
+
+    /**
+     * 根據id查詢商品
+     * @param id
+     * @return
+     */
+    Spu querySpuById(Long id);
+
+    /**
+     * 根據spuid查詢sku列表
+     * @param id
+     * @return
+     */
+    List<Sku> querySkuListBySpuId(Long id);
+
+    /**
+     * 根據spuid查詢spudetail
+     * @param id
+     * @return
+     */
+    SpuDetail querySpuDetailById(Long id);
+
+    /**
+     * 更新商品
+     * @param spuBo
+     * @return
+     */
+    Boolean updateGoods(SpuBo spuBo);
+
+    /**
+     * 刪除商品
+     * @param id
+     * @return
+     */
+    Boolean deleteSpu(long id);
 }

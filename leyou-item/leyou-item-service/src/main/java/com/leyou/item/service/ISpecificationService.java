@@ -21,11 +21,11 @@ public interface ISpecificationService {
     List<SpecGroup> selectSpecGroup(Long cid);
 
     /**
-     * 根据分组id查询参数列表信息（1：n）
+     * 根据條件查询参数列表信息（1：n）
      * @param gid 组别
      * @return 参数列表信息集合List<SpecParam>
      */
-    List<SpecParam> selectSpecParam(Long gid);
+    List<SpecParam> selectSpecParam(Long gid,Long cid, Boolean searching, Boolean generic);
 
     /**
      * 新增规格参数
@@ -67,4 +67,5 @@ public interface ISpecificationService {
      * @return
      */
     boolean deleteSpecGroup(long id);
+
 }

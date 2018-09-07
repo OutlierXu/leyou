@@ -25,6 +25,14 @@ public class GoodsController {
     private IGoodsService goodsService;
 
 
+    /**
+     * 查詢商品
+     * @param key 查詢條件：模糊查詢關鍵字
+     * @param saleable  查詢條件：是否上架
+     * @param page 分頁條件： 當前頁碼
+     * @param rows 分頁條件：每頁記錄數
+     * @return
+     */
     @GetMapping("spu/page")
     public ResponseEntity<PageResult<SpuBo>> queryBrandByPage(@RequestParam(value = "key",required = false)String key,
                                                               @RequestParam(value = "saleable",required = false)Boolean saleable,
@@ -39,4 +47,6 @@ public class GoodsController {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+
 }

@@ -80,15 +80,21 @@ public class SpecificationController {
 
 
     @GetMapping("params")
-    public ResponseEntity<List<SpecParam>> selectSpecParam(@RequestParam("gid") Long gid){
+    public ResponseEntity<List<SpecParam>> selectSpecParamByGid(@RequestParam(value = "gid",required = false) Long gid,
+                                                                @RequestParam(value = "cid",required = false) Long cid,
+                                                                @RequestParam(value = "searching",required = false) Boolean searching,
+                                                                @RequestParam(value = "generic",required = false) Boolean generic
+                                                                ){
 
-        List<SpecParam> specParamList = specificationService.selectSpecParam(gid);
+        List<SpecParam> specParamList = specificationService.selectSpecParam(gid,cid,searching,generic);
 
         if(!CollectionUtils.isEmpty(specParamList)){
             return ResponseEntity.ok(specParamList);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+
 
     @PostMapping("param")
     public ResponseEntity<Void> saveSpecParam(@RequestBody SpecParam Param){

@@ -3,13 +3,12 @@ package com.leyou.item.controller;
 import com.leyou.common.pojo.PageResult;
 import com.leyou.item.service.IGoodsService;
 import com.leyou.item.pojo.SpuBo;
+import com.netflix.ribbon.proxy.annotation.Http;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author XuHao
@@ -46,6 +45,19 @@ public class GoodsController {
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+
+    @PostMapping("goods")
+    public ResponseEntity<Void> addGoods(@RequestBody SpuBo spuBo){
+
+        System.out.println(spuBo);
+
+        Boolean flag = goodsService.addGoods(spuBo);
+        if(flag){
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
 

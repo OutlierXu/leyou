@@ -4,21 +4,20 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.leyou.common.pojo.PageResult;
 import com.leyou.item.mapper.*;
-import com.leyou.item.pojo.Brand;
-import com.leyou.item.pojo.Category;
-import com.leyou.item.pojo.Spu;
-import com.leyou.item.pojo.SpuBo;
+import com.leyou.item.pojo.*;
 import com.leyou.item.service.IGoodsService;
 import com.netflix.discovery.converters.Auto;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +40,15 @@ public class GoodsServiceImpl implements IGoodsService {
 
     @Autowired
     private ICategoryMapper categoryMapper;
+
+    @Autowired
+    private ISpuDetailMapper spuDetailMapper;
+
+    @Autowired
+    private ISkuMapper skuMapper;
+
+    @Autowired
+    private IStockMapper stockMapper;
 
 
     @Override
@@ -89,5 +97,55 @@ public class GoodsServiceImpl implements IGoodsService {
         PageResult<SpuBo> pageResult = new PageResult<>(spuPageInfo.getTotal(), spuBoList);
 
         return pageResult;
+    }
+
+    @Override
+    @Transactional
+    public Boolean addGoods(SpuBo spuBo) {
+
+        //1.基於表關係，先保存spu表
+        Spu spu = new Spu();
+        BeanUtils.copyProperties(spuBo, spu);
+        spu.setCreateTime(new Date());
+        spu.setLastUpdateTime(spu.getCreateTime());
+        spu.setValid(true);
+        spu.setSaleable(true);
+
+        System.out.println("新增商品spu信息" + spu);
+
+        spuMapper.insertSelective(spu);
+
+        //2.保存spuDetail
+        SpuDetail spuDetail = spuBo.getSpuDetail();
+        spuDetail.setSpuId(spu.getId());
+
+        spuDetailMapper.insertSelective(spuDetail);
+
+        //3.保存sku
+        saveSku(spuBo, spu.getId());
+        return true;
+    }
+
+    /**
+     * 保存sku
+     * @param spuBo
+     * @param id 對應的SPU的id
+     */
+    private void saveSku(SpuBo spuBo, Long id) {
+        for (Sku sku : spuBo.getSkus()) {
+
+            sku.setSpuId(id);
+            sku.setCreateTime(new Date());
+            sku.setLastUpdateTime(sku.getCreateTime());
+
+            skuMapper.insertSelective(sku);
+
+            //更新庫存表（sku的副表）
+            Stock stock = new Stock();
+            stock.setSkuId(sku.getId());
+            stock.setStock(sku.getStock());
+
+            stockMapper.insertSelective(stock);
+        }
     }
 }

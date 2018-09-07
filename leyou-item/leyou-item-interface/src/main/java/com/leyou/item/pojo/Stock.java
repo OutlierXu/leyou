@@ -49,4 +49,14 @@ public class Stock {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
+
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "skuId=" + skuId +
+                ", seckillStock=" + seckillStock +
+                ", seckillTotal=" + seckillTotal +
+                ", stock=" + stock +
+                '}';
+    }
 }

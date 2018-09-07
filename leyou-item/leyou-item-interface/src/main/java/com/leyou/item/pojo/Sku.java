@@ -114,4 +114,21 @@ public class Sku {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
+
+    @Override
+    public String toString() {
+        return "Sku{" +
+                "id=" + id +
+                ", spuId=" + spuId +
+                ", title='" + title + '\'' +
+                ", images='" + images + '\'' +
+                ", price=" + price +
+                ", ownSpec='" + ownSpec + '\'' +
+                ", indexes='" + indexes + '\'' +
+                ", enable=" + enable +
+                ", createTime=" + createTime +
+                ", lastUpdateTime=" + lastUpdateTime +
+                ", stock=" + stock +
+                '}';
+    }
 }

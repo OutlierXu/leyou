@@ -54,4 +54,14 @@ public class SpuBo extends Spu {
     public void setSkus(List<Sku> skus) {
         this.skus = skus;
     }
+
+    @Override
+    public String toString() {
+        return "SpuBo{" +
+                "cname='" + cname + '\'' +
+                ", bname='" + bname + '\'' +
+                ", spuDetail=" + spuDetail +
+                ", skus=" + skus +
+                '}';
+    }
 }

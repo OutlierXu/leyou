@@ -67,4 +67,16 @@ public class SpuDetail {
     public void setAfterService(String afterService) {
         this.afterService = afterService;
     }
+
+    @Override
+    public String toString() {
+        return "SpuDetail{" +
+                "spuId=" + spuId +
+                ", description='" + description + '\'' +
+                ", specialSpec='" + specialSpec + '\'' +
+                ", genericSpec='" + genericSpec + '\'' +
+                ", packingList='" + packingList + '\'' +
+                ", afterService='" + afterService + '\'' +
+                '}';
+    }
 }

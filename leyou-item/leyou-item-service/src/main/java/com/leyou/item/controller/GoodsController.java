@@ -2,11 +2,9 @@ package com.leyou.item.controller;
 
 import com.leyou.common.pojo.PageResult;
 import com.leyou.item.pojo.Sku;
-import com.leyou.item.pojo.Spu;
 import com.leyou.item.pojo.SpuDetail;
 import com.leyou.item.service.IGoodsService;
-import com.leyou.item.pojo.SpuBo;
-import com.netflix.ribbon.proxy.annotation.Http;
+import com.leyou.item.bo.SpuBo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +36,7 @@ public class GoodsController {
      * @return
      */
     @GetMapping("spu/page")
-    public ResponseEntity<PageResult<SpuBo>> queryBrandByPage(@RequestParam(value = "key",required = false)String key,
+    public ResponseEntity<PageResult<SpuBo>> querySpuByPage(@RequestParam(value = "key",required = false)String key,
                                                               @RequestParam(value = "saleable",required = false)Boolean saleable,
                                                               @RequestParam(value = "page",defaultValue = "1")Integer page,
                                                               @RequestParam(value = "rows",defaultValue = "5") Integer rows){
@@ -63,6 +61,11 @@ public class GoodsController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    /**
+     * 根据spu_id查询spudeail
+     * @param id
+     * @return
+     */
     @GetMapping("spu/detail/{id}")
     public ResponseEntity<SpuDetail> querySpuDetailById(@PathVariable("id")Long id){
 

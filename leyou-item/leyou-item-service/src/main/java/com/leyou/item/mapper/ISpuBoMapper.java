@@ -1,6 +1,6 @@
 package com.leyou.item.mapper;
 
-import com.leyou.item.pojo.SpuBo;
+import com.leyou.item.bo.SpuBo;
 import tk.mybatis.mapper.common.Mapper;
 
 /**

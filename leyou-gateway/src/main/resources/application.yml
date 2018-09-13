@@ -16,3 +16,4 @@ zuul:
   prefix: /api
   routes:
     item-service: /item/** # 路由商品微服务
+    search-service: /search/** # 路由搜索微服务

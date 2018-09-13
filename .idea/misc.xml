@@ -5,6 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/leyou-item/pom.xml" />
+        <option value="$PROJECT_DIR$/leyou-search/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

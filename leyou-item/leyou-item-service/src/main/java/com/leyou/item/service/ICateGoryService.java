@@ -9,4 +9,6 @@ public interface ICateGoryService {
     List<Category> queryCategoryListByParentId(Long pid);
 
     List<Category> queryCategoryListByBid(Long bid);
+
+    List<Category> queryCategoryListByCids(List<Long> ids);
 }

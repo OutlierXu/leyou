@@ -42,6 +42,11 @@ public class CategoryServiceImpl implements ICateGoryService {
 
         return categoryList;
     }
+
+    @Override
+    public List<Category> queryCategoryListByCids(List<Long> ids) {
+        return categoryMapper.selectByIdList(ids);
+    }
 }
 
 

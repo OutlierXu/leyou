@@ -11,6 +11,7 @@
         <module name="leyou-item-interface" />
         <module name="leyou-item-service" />
         <module name="leyou-registry" />
+        <module name="leyou-search" />
         <module name="leyou-upload" />
       </profile>
     </annotationProcessing>
@@ -22,6 +23,7 @@
       <module name="leyou-item-interface" target="1.8" />
       <module name="leyou-item-service" target="1.8" />
       <module name="leyou-registry" target="1.8" />
+      <module name="leyou-search" target="1.8" />
       <module name="leyou-upload" target="1.8" />
     </bytecodeTargetLevel>
   </component>

@@ -4,10 +4,7 @@ import com.leyou.common.pojo.PageResult;
 import com.leyou.item.bo.SpuBo;
 import com.leyou.item.pojo.Sku;
 import com.leyou.item.pojo.SpuDetail;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,7 +15,6 @@ import java.util.List;
  * @Description: goods对外接口
  * @date 2018/9/921:40
  */
-@RestController
 public interface GoodsAPI {
 
     /**
@@ -27,13 +23,13 @@ public interface GoodsAPI {
      * @param saleable  查詢條件：是否上架
      * @param page 分頁條件： 當前頁碼
      * @param rows 分頁條件：每頁記錄數
-     * @return
+     * @return 商品分页结果
      */
     @GetMapping("spu/page")
-    public PageResult<SpuBo> querySpuByPage(@RequestParam(value = "key",required = false)String key,
-                                                              @RequestParam(value = "saleable",required = false)Boolean saleable,
-                                                              @RequestParam(value = "page",defaultValue = "1")Integer page,
-                                                              @RequestParam(value = "rows",defaultValue = "5") Integer rows);
+    public PageResult<SpuBo> querySpuByPage(@RequestParam(value = "key",required = false) String key,
+                                            @RequestParam(value = "saleable",required = false) Boolean saleable,
+                                            @RequestParam(value = "page",defaultValue = "1") Integer page,
+                                            @RequestParam(value = "rows",defaultValue = "5") Integer rows);
 
 
     /**

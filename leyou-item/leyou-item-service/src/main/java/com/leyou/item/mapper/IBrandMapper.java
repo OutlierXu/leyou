@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import tk.mybatis.mapper.additional.idlist.SelectByIdListMapper;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * @author XuHao
  */
-public interface IBrandMapper extends Mapper<Brand> {
+public interface IBrandMapper extends Mapper<Brand>,SelectByIdListMapper<Brand,Long> {
 
 
     /**

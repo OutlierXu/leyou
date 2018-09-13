@@ -20,6 +20,29 @@ public class BrandController {
     @Autowired
     private IBrandService brandService;
 
+    @GetMapping("{id}")
+    public ResponseEntity<Brand> queryBrandByBid(@PathVariable("id")Long id){
+
+        Brand brand = brandService.queryBrandByBid(id);
+
+        if (brand == null){
+
+            //查询品牌数为空
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(brand);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Brand>> queryBrandByBids(@RequestParam("bids")List<Long> bids){
+        List<Brand> brandList = brandService.queryBrandByBids(bids);
+
+        if(CollectionUtils.isEmpty(brandList)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(brandList);
+    }
+
     @RequestMapping("page")
     public ResponseEntity<PageResult<Brand>> queryBrandByPage(@RequestParam(value = "key",required = false)String key,
                                                               @RequestParam(value = "page",defaultValue = "1")Integer page,

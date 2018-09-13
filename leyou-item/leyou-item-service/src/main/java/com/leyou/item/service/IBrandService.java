@@ -26,4 +26,18 @@ public interface IBrandService {
      * @return
      */
     List<Brand> updateBrandByCid3(Long cid);
+
+    /**
+     * 根据bid查询品牌
+     * @param id
+     * @return
+     */
+    Brand queryBrandByBid(Long id);
+
+    /**
+     * 批量获取brand
+     * @param bids
+     * @return
+     */
+    List<Brand> queryBrandByBids(List<Long> bids);
 }

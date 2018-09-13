@@ -60,7 +60,7 @@ public class GoodsServiceImpl implements IGoodsService {
             criteria.andEqualTo("saleable", saleable);
         }
         if(StringUtils.isNotBlank(key)){
-            criteria.andLike("title", key);
+            criteria.andLike("title", "%" + key + "%");
         }
 
         PageHelper.startPage(page, rows);

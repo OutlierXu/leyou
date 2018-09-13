@@ -2,8 +2,12 @@ package com.leyou.item.api;
 
 import com.leyou.common.pojo.PageResult;
 import com.leyou.item.pojo.Brand;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * @author XuHao
@@ -33,4 +37,18 @@ public interface BrandAPI {
                                                               @RequestParam(value = "desc",defaultValue = "false")Boolean desc);
 
 
+    /**
+     * 根据id获取对应的brand信息
+     * @param id
+     */
+    @GetMapping("{id}")
+    public Brand queryBrandByBid(@PathVariable("id")Long id);
+
+    /**
+     * 批量获取brand
+     * @param bids
+     * @return
+     */
+    @GetMapping
+    List<Brand> queryBrandByBids(@RequestParam("bids")List<Long> bids);
 }

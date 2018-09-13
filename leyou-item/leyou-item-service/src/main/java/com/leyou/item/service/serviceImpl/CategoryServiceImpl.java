@@ -6,6 +6,8 @@ import com.leyou.item.service.ICateGoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -46,6 +48,17 @@ public class CategoryServiceImpl implements ICateGoryService {
     @Override
     public List<Category> queryCategoryListByCids(List<Long> ids) {
         return categoryMapper.selectByIdList(ids);
+    }
+
+
+    @Override
+    public List<Category> queryAllCategoryByCid3(Long cid3) {
+
+        Category c3 = this.categoryMapper.selectByPrimaryKey(cid3);
+        Category c2 = this.categoryMapper.selectByPrimaryKey(c3.getParentId());
+        Category c1 = this.categoryMapper.selectByPrimaryKey(c2.getParentId());
+
+        return Arrays.asList(c1,c2,c3);
     }
 }
 

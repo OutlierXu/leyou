@@ -14,6 +14,8 @@ import com.leyou.search.pojo.SearchResult;
 import com.leyou.search.service.IGoodsService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -177,7 +179,23 @@ public class GoodsService implements IGoodsService {
 
         //1.1创建基本查询条件，（输入的key值：匹配索引库中all字段）
 
-        NativeSearchQueryBuilder basicSearchQueryBuilder = searchQueryBuilder.withQuery(QueryBuilders.matchQuery("all", request.getKey()).operator(Operator.AND));
+        MatchQueryBuilder basicQuery = QueryBuilders.matchQuery("all", request.getKey()).operator(Operator.AND);
+
+
+        //1.4遍历前台传入的过滤条件，构建带过滤条件的基本查询
+        Map<String, String> filter = request.getFilter();
+
+        if(!filter.isEmpty()){
+
+            //不为空 构建带过滤条件的基本查询
+            BoolQueryBuilder boolQueryBuilder = buildBasicQueryWithFilter(filter, basicQuery);
+            searchQueryBuilder.withQuery(boolQueryBuilder);
+        } else{
+            //为空，执行基本查询
+            searchQueryBuilder.withQuery(basicQuery);
+        }
+
+
         //1.2添加分页条件
         searchQueryBuilder.withPageable(PageRequest.of(request.getPage() - 1, request.getSize()));
 
@@ -203,7 +221,7 @@ public class GoodsService implements IGoodsService {
 
         if (categoryList.size() == 1){
 
-            specs = getSpecs(basicSearchQueryBuilder,categoryList.get(0).getId());
+            specs = getSpecs(searchQueryBuilder,categoryList.get(0).getId());
         }
 
 
@@ -212,10 +230,47 @@ public class GoodsService implements IGoodsService {
         return result;
     }
 
+    /**
+     * 构建带过滤条件的基本查询条件
+     * @param filter 过滤条件的集合map
+     * @param basicQuery 基本匹配查询条件
+     * @return
+     */
+    private BoolQueryBuilder buildBasicQueryWithFilter(Map<String, String> filter, MatchQueryBuilder basicQuery) {
+
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
+        //添加基本查询条件
+        boolQueryBuilder.must(basicQuery);
+
+        for (Map.Entry<String, String> entry : filter.entrySet()) {
+
+            //遍历map，过滤
+            String key = entry.getKey();
+            String field= "";
+
+            if(key.equals("分类")){
+                field = "cid3";
+            }else if(key.equals("品牌")){
+                field = "brandId";
+            }else {
+                field = "specs."+key+".keyword";
+            }
+
+            boolQueryBuilder.filter(QueryBuilders.termQuery(field, entry.getValue()));
+
+        }
+
+        return boolQueryBuilder;
+
+    }
+
     private List<Map<String,Object>> getSpecs(NativeSearchQueryBuilder searchQueryBuilder, Long cid3) {
         List<Map<String,Object>> specs = new ArrayList<>();
 
         List<SpecParam> specParamList = this.specificationClient.selectSpecParamByGid(null, cid3, true, null);
+
+        //NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder().withQuery(basicQuery);
 
         // 不需要任何查询结果集
         searchQueryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{}, null));
@@ -240,7 +295,6 @@ public class GoodsService implements IGoodsService {
 
             specs.add(specParamMap);
         });
-
 
         return  specs;
 

@@ -27,6 +27,28 @@ public class CategoryController {
     @Autowired
     private ICateGoryService cateGoryService;
 
+    /**
+     * 根据cid3查询所有的cid1、cid2、cid3对应的category对象
+     * @param cid3
+     * @return
+     */
+    @GetMapping("all/level")
+    public ResponseEntity<List<Category>> queryAllCategoryByCid3(@RequestParam("cid3") Long cid3){
+
+        List<Category> categoryList = cateGoryService.queryAllCategoryByCid3(cid3);
+
+        if(CollectionUtils.isEmpty(categoryList)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(categoryList);
+    }
+
+
+    /**
+     * 根据父id查询所有商品分类
+     * @param pid
+     * @return
+     */
     @RequestMapping("list")
     public ResponseEntity<List<Category>> queryCategoryListByParentId(@RequestParam("pid")Long pid){
 

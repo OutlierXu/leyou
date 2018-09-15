@@ -29,4 +29,16 @@ public interface IGoodsService {
      * @return 封装好的goods对象
      */
     public Goods buildGoods(Spu spu) throws IOException;
+
+    /**
+     * 根据商品id创建索引
+     * @param id
+     */
+    void creadIndex(Long id) throws IOException;
+
+    /**
+     * 根据商品id删除索引
+     * @param id
+     */
+    void deleteIndex(Long id);
 }

@@ -131,6 +131,25 @@ public class GoodsService implements IGoodsService {
         return goods;
     }
 
+    @Override
+    public void creadIndex(Long id) throws IOException {
+
+        //1.查询数据库
+        Spu spu = this.goodsClient.querySpuById(id);
+
+        //2.构建用于存到索引库的商品
+        Goods goods = this.buildGoods(spu);
+
+        //3.商品保存到索引库
+        this.goodsRepository.save(goods);
+
+    }
+
+    @Override
+    public void deleteIndex(Long id) {
+        this.goodsRepository.deleteById(id);
+    }
+
     /**
      * 获取数值所处的区间
      * @param value 数据

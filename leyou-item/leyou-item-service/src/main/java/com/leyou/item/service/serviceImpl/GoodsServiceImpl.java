@@ -8,6 +8,9 @@ import com.leyou.item.mapper.*;
 import com.leyou.item.pojo.*;
 import com.leyou.item.service.IGoodsService;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +53,10 @@ public class GoodsServiceImpl implements IGoodsService {
 
     @Autowired
     private IStockMapper stockMapper;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
 
 
     @Override
@@ -123,6 +131,10 @@ public class GoodsServiceImpl implements IGoodsService {
 
         //3.保存sku
         saveSku(spuBo, spu.getId());
+
+        //4.发送消息到队列
+        sendMsg(spuBo.getId(),"insert");
+
         return true;
     }
 
@@ -166,6 +178,9 @@ public class GoodsServiceImpl implements IGoodsService {
         //4.更新spuDetail
         spuDetailMapper.updateByPrimaryKeySelective(spuBo.getSpuDetail());
 
+        //5.发送消息到队列
+        sendMsg(id,"update");
+
 
         return true;
     }
@@ -182,6 +197,9 @@ public class GoodsServiceImpl implements IGoodsService {
 
         //3.刪除spu表
         spuMapper.deleteByPrimaryKey(id);
+
+        //4.发送消息到队列
+        sendMsg(id,"delete");
 
         return true;
     }
@@ -227,6 +245,20 @@ public class GoodsServiceImpl implements IGoodsService {
 
             //刪除以前的sku記錄
             skuMapper.deleteByExample(example);
+        }
+    }
+
+    /**
+     * 发送消息到消息队列
+     * @param id 消息携带的商品id
+     * @param type 消息的类型（区别增删改方法）
+     */
+    public void sendMsg(Long id, String type){
+
+        try {
+            this.amqpTemplate.convertAndSend("item." + type, id);
+        } catch (AmqpException e) {
+            e.printStackTrace();
         }
     }
 

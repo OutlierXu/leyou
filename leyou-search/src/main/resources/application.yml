@@ -9,6 +9,11 @@ spring:
     name: search-service
   jackson:
     default-property-inclusion: non_null
+  rabbitmq:
+    host: 192.168.56.80
+    username: leyou
+    password: leyou
+    virtual-host: /leyou
 eureka:
   client:
     service-url:

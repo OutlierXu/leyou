@@ -7,6 +7,14 @@ spring:
     url: jdbc:mysql://localhost:3306/leyou
     username: root
     password: root
+  rabbitmq:
+    host: 192.168.56.80
+    username: leyou
+    password: leyou
+    virtual-host: /leyou
+    template:
+      exchange: LEUYOU.ITEM.EXCHANGE  #默认的交换机
+    publisher-confirms: true
 mybatis:
   type-aliases-package: com.leyou.item.pojo
   mapper-locations: classpath:mappers/**.xml

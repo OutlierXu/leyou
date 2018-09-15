@@ -70,4 +70,12 @@ public class ItemHtmlService implements IItemHtmlService {
 
         ThreadUtils.execute(()->createHtml(id));
     }
+
+    @Override
+    public void deleteHtml(Long id) {
+        File file = new File("D:\\Program Files\\nginx-1.14.0\\html\\item\\" + id + ".html");
+        if(file.exists()){
+            file.deleteOnExit();
+        }
+    }
 }

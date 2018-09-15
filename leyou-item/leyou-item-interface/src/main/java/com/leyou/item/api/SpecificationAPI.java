@@ -20,6 +20,11 @@ import java.util.List;
 public interface SpecificationAPI {
 
 
+    /**
+     * 根据cid3查询规格参数组即组下所有的规格参数
+     * @param cid
+     * @return
+     */
     @GetMapping("groups/{cid}")
     List<SpecGroup> selectSpecGroup(@PathVariable("cid") Long cid);
 

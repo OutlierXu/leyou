@@ -27,6 +27,11 @@ public class SpecificationController {
     @Autowired
     public ISpecificationService specificationService;
 
+    /**
+     * 根据cid3查询规格参数组即组下所有的规格参数
+     * @param cid
+     * @return
+     */
     @GetMapping("groups/{cid}")
     public ResponseEntity<List<SpecGroup>> selectSpecGroup(@PathVariable("cid") Long cid){
 

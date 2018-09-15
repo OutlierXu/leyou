@@ -39,6 +39,13 @@ public class SpecificationServiceImpl implements ISpecificationService {
         example.createCriteria().andEqualTo("cid", cid);
 
         List<SpecGroup> specGroupList = specGroupMapper.selectByExample(example);
+        specGroupList.forEach(specGroup -> {
+            SpecParam record = new SpecParam();
+            record.setGroupId(specGroup.getId());
+            List<SpecParam> params = specParamMapper.select(record);
+            specGroup.setParams(params);
+        });
+
         return specGroupList;
     }
 

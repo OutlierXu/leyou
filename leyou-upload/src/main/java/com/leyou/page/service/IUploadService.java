@@ -1,4 +1,4 @@
-package com.leyou.service;
+package com.leyou.page.service;
 
 import org.springframework.web.multipart.MultipartFile; /**
  * @author XuHao

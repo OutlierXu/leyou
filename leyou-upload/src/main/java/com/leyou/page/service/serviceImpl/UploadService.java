@@ -1,9 +1,9 @@
-package com.leyou.service.serviceImpl;
+package com.leyou.page.service.serviceImpl;
 
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
-import com.leyou.controller.UploadController;
-import com.leyou.service.IUploadService;
+import com.leyou.page.controller.UploadController;
+import com.leyou.page.service.IUploadService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.security.cert.Extension;
 import java.util.Arrays;
 import java.util.List;
 

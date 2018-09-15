@@ -4,6 +4,7 @@ import com.leyou.common.pojo.PageResult;
 import com.leyou.item.bo.SpuBo;
 import com.leyou.item.pojo.Brand;
 import com.leyou.item.pojo.Category;
+import com.leyou.item.pojo.Spu;
 import com.leyou.search.client.BrandClient;
 import com.leyou.search.client.CategoryClient;
 import com.leyou.search.client.GoodsClient;
@@ -65,6 +66,12 @@ public class TestItemApi {
 
         List<String> categoryNames = this.categoryClient.queryCategoryNamesByCids(Arrays.asList(61L, 67L, 69L));
         System.out.println(categoryNames);
+    }
+
+    @Test
+    public void testSpuApi(){
+        Spu spu = this.goodsClient.querySpuById(79L);
+        System.out.println(spu);
     }
 
 

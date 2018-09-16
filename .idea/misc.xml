@@ -9,11 +9,13 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/leyou-item/pom.xml" />
         <option value="$PROJECT_DIR$/leyou-search/pom.xml" />
+        <option value="$PROJECT_DIR$/leyou-sms/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/leyou-item/pom.xml" />
+        <option value="$PROJECT_DIR$/leyou-user/pom.xml" />
       </set>
     </option>
   </component>

@@ -17,3 +17,4 @@ zuul:
   routes:
     item-service: /item/** # 路由商品微服务
     search-service: /search/** # 路由搜索微服务
+    user-service: /user/** # 用户中心微服务

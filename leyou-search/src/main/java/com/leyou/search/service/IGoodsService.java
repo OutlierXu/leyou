@@ -31,10 +31,10 @@ public interface IGoodsService {
     public Goods buildGoods(Spu spu) throws IOException;
 
     /**
-     * 根据商品id创建索引
+     * 根据商品id，查询数据库并创建索引
      * @param id
      */
-    void creadIndex(Long id) throws IOException;
+    void createIndex(Long id) throws IOException;
 
     /**
      * 根据商品id删除索引

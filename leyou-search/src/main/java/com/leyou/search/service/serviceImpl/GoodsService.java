@@ -132,7 +132,7 @@ public class GoodsService implements IGoodsService {
     }
 
     @Override
-    public void creadIndex(Long id) throws IOException {
+    public void createIndex(Long id) throws IOException {
 
         //1.查询数据库
         Spu spu = this.goodsClient.querySpuById(id);

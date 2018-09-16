@@ -16,7 +16,7 @@ import java.util.Map;
  * @author XuHao
  * @Title: ItemHtmlService
  * @ProjectName leyou
- * @Description: TODO
+ * @Description: 静态化页面的创建、删除
  * @date 2018/9/1511:04
  */
 @Service

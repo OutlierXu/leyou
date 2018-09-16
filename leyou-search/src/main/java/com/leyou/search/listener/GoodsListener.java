@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author XuHao
  * @Title: GoodsListener
  * @ProjectName leyou
- * @Description: TODO
+ * @Description: 监听消息队列，执行索引库的增删改操作
  * @date 2018/9/1520:37
  */
 @Component
@@ -25,12 +25,12 @@ public class GoodsListener {
     private IGoodsService goodsService;
 
     /**
-     * 监听"LEYOU.CREATE.INDEX.QUEUE"队列，接收消息"item.insert","item.update"的消息，做新增商品索引的操作
+     * 监听"LEYOU.CREATE.INDEX.QUEUE"队列，接收消息"item.insert","item.update"的消息，做新增/更新商品索引的操作
      * @param id
      * @throws IOException
      */
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(
-            value = "LEYOU.CREATE.INDEX.QUEUE",durable = "true"),
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "LEYOU.CREATE.INDEX.QUEUE",durable = "true"),
             exchange = @Exchange(value = "LEUYOU.ITEM.EXCHANGE",ignoreDeclarationExceptions = "true",type = ExchangeTypes.TOPIC),
             key = {"item.insert","item.update"}
     ))
@@ -39,11 +39,11 @@ public class GoodsListener {
             return;
         }
         // 创建或更新索引 ,由于是自动ACK所以此处异常抛出
-        this.goodsService.creadIndex(id);
+        this.goodsService.createIndex(id);
     }
 
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(
-            value = "LEYOU.DELETE.INDEX.QUEUE",durable = "true"),
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "LEYOU.DELETE.INDEX.QUEUE",durable = "true"),
             exchange = @Exchange(value = "LEUYOU.ITEM.EXCHANGE",ignoreDeclarationExceptions = "true",type = ExchangeTypes.TOPIC),
             key = "item.delete"
     ))

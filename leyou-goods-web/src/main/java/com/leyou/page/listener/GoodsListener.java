@@ -26,8 +26,8 @@ public class GoodsListener {
      * 监听"LEYOU.CREATE.HTML.QUEUE"消息队列的"item.insert","item.update"消息，执行创建静态页面的方法
      * @param id
      */
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(
-            value = "LEYOU.CREATE.HTML.QUEUE",durable = "true"),
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "LEYOU.CREATE.HTML.QUEUE",durable = "true"),
             exchange = @Exchange(value = "LEUYOU.ITEM.EXCHANGE",ignoreDeclarationExceptions = "true",type = ExchangeTypes.TOPIC),
             key = {"item.insert","item.update"}
     ))
@@ -36,7 +36,7 @@ public class GoodsListener {
         if(id == null){
             return;
         }
-        this.itemHtmlService.createHtml(id);
+        this.itemHtmlService.asyncExcute(id);
     }
 
     /**

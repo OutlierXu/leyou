@@ -101,6 +101,22 @@ public class GoodsController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    /**
+     * 根据skuid查询sku
+     * @param id
+     * @return
+     */
+    @GetMapping("sku/{id}")
+    public ResponseEntity<Sku> querySkuBySkuId(@PathVariable("id") Long id){
+        Sku sku = goodsService.querySkuBySkuId(id);
+
+        if(sku != null){
+            return ResponseEntity.ok(sku);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+
     @PutMapping("goods")
     public ResponseEntity<Void> updateGoods(@RequestBody SpuBo spuBo){
         Boolean flag = goodsService.updateGoods(spuBo);

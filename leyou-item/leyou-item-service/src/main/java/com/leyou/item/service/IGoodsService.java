@@ -67,4 +67,6 @@ public interface IGoodsService {
      * @return
      */
     Boolean deleteSpu(long id);
+
+    Sku querySkuBySkuId(Long skuId);
 }

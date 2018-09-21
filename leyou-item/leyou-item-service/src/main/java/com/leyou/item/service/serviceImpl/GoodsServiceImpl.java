@@ -204,6 +204,11 @@ public class GoodsServiceImpl implements IGoodsService {
         return true;
     }
 
+    @Override
+    public Sku querySkuBySkuId(Long skuId) {
+        return this.skuMapper.selectByPrimaryKey(skuId);
+    }
+
     /**
      * 保存sku及對應庫存
      * @param spuBo

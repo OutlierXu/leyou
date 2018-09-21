@@ -1,21 +1,21 @@
 package com.leyou.user.service.serviceImpl;
 
 import com.leyou.common.utils.NumberUtils;
-import com.leyou.pojo.User;
+import com.leyou.user.pojo.User;
 import com.leyou.user.mapper.UserMapper;
 import com.leyou.user.service.IUserService;
+import com.leyou.user.utils.CodecUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 /**
  * @author XuHao
@@ -84,6 +84,7 @@ public class UserService implements IUserService {
             this.amqpTemplate.convertAndSend("LEYOU.SMS.EXCHANGE", "sms.verify.code", msg);
 
             //3.将验证码处理后保存到redis中
+            System.out.println(code);
             this.redisTemplate.opsForValue().set(KEY_PREFIX + phone,code ,5 , TimeUnit.MINUTES);
 
             return true;
@@ -92,5 +93,45 @@ public class UserService implements IUserService {
             return false;
         }
 
+    }
+
+    @Override
+    public Boolean register(User user, String code) {
+
+        String redisCode = this.redisTemplate.opsForValue().get(KEY_PREFIX + user.getPhone());
+        System.out.println("redisCode:" + redisCode);
+        System.out.println("Code:" + code);
+        //1.校验验证码
+        if(!StringUtils.equals(redisCode, code)){
+            return false;
+        }
+        //2. 生成加密密码
+        String salt = CodecUtils.generateSalt();
+        user.setSalt(salt);
+        user.setPassword(CodecUtils.md5Hex(user.getPassword(), salt));
+
+        user.setCreated(new Date());
+        //3.保存用户
+        Boolean boo = this.userMapper.insertSelective(user) == 1;
+        //4.如果保存成功，删除redis
+
+        if(boo){
+            this.redisTemplate.delete(KEY_PREFIX + user.getPhone());
+        }
+        return boo;
+    }
+
+    @Override
+    public User queryUser(String username, String password) {
+
+        User record = new User();
+        record.setUsername(username);
+        User user = this.userMapper.selectOne(record);
+
+        if(user == null || !StringUtils.equals(user.getPassword(), CodecUtils.md5Hex(password, user.getSalt()))){
+            //查询不到，或者密码不匹配
+            return null;
+        }
+        return user;
     }
 }

@@ -19,7 +19,7 @@ public class LeyouCorsConfiguration {
         //1.1.1s设置服务器信任域名
         configuration.addAllowedOrigin("http://manage.leyou.com");
         configuration.addAllowedOrigin("http://www.leyou.com");
-        //1.2.是否发生cookie信息
+        //1.2.是否发送cookie信息
         configuration.setAllowCredentials(true);
         //1.3.允许哪些请求跨域
         configuration.addAllowedMethod("*");

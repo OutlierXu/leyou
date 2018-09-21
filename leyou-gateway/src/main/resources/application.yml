@@ -15,6 +15,26 @@ eureka:
 zuul:
   prefix: /api
   routes:
-    item-service: /item/** # 路由商品微服务
+    item-service: /item/**  #路由商品微服务
     search-service: /search/** # 路由搜索微服务
-    user-service: /user/** # 用户中心微服务
+    user-service: /user/**  #用户中心微服务
+    auth-service: /auth/** #鉴权中心微服务
+    cart-service: /cart/** #购物车微服务
+    order-service: /order/** #订单微服务
+  add-host-header: true  #携带请求主机本身的head头信息
+  sensitive-headers:    #配置禁止使用的头信息，这里设置为null，否则set—cookie无效
+leyou:
+  jwt:
+    pubKeyPath: C:\\tem\\rsa\\rsa.pub # 公钥地址
+    cookieName: Ly_TOKEN
+  filter:
+    allowPaths:
+      - /api/auth
+      - /api/search
+      - /api/user/register
+      - /api/user/check
+      - /api/user/code
+      - /api/item
+ribbon:
+  eager-load:
+    enabled: true

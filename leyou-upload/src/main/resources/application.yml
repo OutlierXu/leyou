@@ -6,6 +6,11 @@ spring:
   servlet:
     multipart:
       max-file-size: 5MB
+  zipkin:
+    base-url: http://localhost:10020   #链路监控
+  sleuth:
+    sampler:
+      probability: 1.0
 eureka:
   client:
     service-url:
@@ -14,8 +19,11 @@ eureka:
     fetch-registry: true
     registry-fetch-interval-seconds: 5
   instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: ${eureka.instance.ip-address}.${server.port}
     lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 10
+    lease-expiration-duration-in-seconds: 15
 fdfs:
   so-timeout: 1501 #读取时间
   connect-timeout: 601 #连接超时时间

@@ -2,6 +2,8 @@ package com.leyou.order.controller;
 
 import com.leyou.common.pojo.PageResult;
 import com.leyou.order.pojo.Order;
+import com.leyou.order.pojo.OrderRequest;
+import com.leyou.order.pojo.OrderStatus;
 import com.leyou.order.service.OrderService;
 import com.leyou.utils.PayHelper;
 import com.leyou.utils.PayState;
@@ -10,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,6 +28,49 @@ public class OrderController {
     @Autowired
     private PayHelper payHelper;
 
+    @PostMapping("page")
+    public ResponseEntity<PageResult<Order>> loadOrderByPage(@RequestBody()OrderRequest request){
+
+        PageResult<Order> result = this.orderService.loadOrderByPage(request);
+        if(CollectionUtils.isEmpty(result.getItems())){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("{orderId}")
+    public ResponseEntity<Void> deleteOrderByOrderId(@PathVariable("orderId") Long orderId){
+
+        Boolean result = this.orderService.deleteOrderByOrderId(orderId);
+        if(result){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+    /**
+     * 根据订单状态分类查询订单
+     * @param request
+     * @return
+     */
+    @PostMapping("/pay/page")
+    public ResponseEntity<PageResult<Order>> loadOrderByStatus(@RequestBody()OrderRequest request){
+
+        PageResult<Order> result = this.orderService.loadOrderByStatus(request);
+        if(CollectionUtils.isEmpty(result.getItems())){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("status/{orderId}")
+    public ResponseEntity<OrderStatus> loadOrderStatusByOrderId(@PathVariable("orderId") Long orderId){
+
+        OrderStatus status = this.orderService.loadOrderStatusByOrderId(orderId);
+        if(status == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(status);
+    }
     /**
      * 创建订单
      *

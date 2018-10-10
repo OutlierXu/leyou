@@ -14,13 +14,21 @@ spring:
     username: leyou
     password: leyou
     virtual-host: /leyou
+  zipkin:
+    base-url: http://localhost:10020   #链路监控
+  sleuth:
+    sampler:
+      probability: 1.0
 eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:10086/eureka
   instance:
-    lease-expiration-duration-in-seconds: 15
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: ${eureka.instance.ip-address}.${server.port}
     lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
 mybatis:
   mapper-locations: classpath:mappers/**.xml
   type-aliases-package: com.leyou.user.pojo

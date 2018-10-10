@@ -84,7 +84,7 @@ public class GoodsElasticsearch {
 
             page ++;
 
-        }while (size == 100);
+        }while (size == 100);//如果还有下一页就继续循环
 
 
     }

@@ -8,6 +8,11 @@ spring:
     username: leyou
     password: leyou
     virtual-host: /leyou
+  zipkin:
+    base-url: http://localhost:10020   #链路监控
+  sleuth:
+    sampler:
+      probability: 1.0
 leyou:
   sms:
     accessKeyId: LTAIrSADDEk7w017 # 你自己的accessKeyId

@@ -3,6 +3,11 @@ server:
 spring:
   application:
     name: leyou-registry
+  zipkin:
+    base-url: http://localhost:10020   #链路监控
+  sleuth:
+    sampler:
+      probability: 1.0
 eureka:
   client:
     service-url:

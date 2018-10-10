@@ -2,6 +2,7 @@ package com.leyou.order.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.leyou.auth.pojo.UserInfo;
 import com.leyou.common.pojo.PageResult;
 import com.leyou.common.utils.IdWorker;
@@ -11,13 +12,18 @@ import com.leyou.order.mapper.OrderMapper;
 import com.leyou.order.mapper.OrderStatusMapper;
 import com.leyou.order.pojo.Order;
 import com.leyou.order.pojo.OrderDetail;
+import com.leyou.order.pojo.OrderRequest;
 import com.leyou.order.pojo.OrderStatus;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -132,4 +138,114 @@ public class OrderService {
         return count == 1;
     }
 
+    public PageResult<Order> loadOrderByPage(OrderRequest request) {
+
+        //获取登录用户
+        UserInfo loginUser = LoginInterceptor.getLoginUser();
+
+        Order record = new Order();
+        record.setUserId(loginUser.getId());
+
+        PageHelper.startPage(request.getPage(), request.getSize());
+        List<Order> orderList = this.orderMapper.select(record);
+        PageInfo<Order> pageInfo = new PageInfo<>(orderList);
+
+        if (!CollectionUtils.isEmpty(orderList)) {
+            orderList.forEach(order -> {
+                Example example = new Example(OrderDetail.class);
+
+                Example.Criteria criteria = example.createCriteria();
+                // 拼接查询条件
+                if (StringUtils.isNotBlank(request.getKey())) {
+                    criteria.andLike("title", "%" + request.getKey() + "%");
+                }
+                criteria.andEqualTo("orderId", order.getOrderId());
+                List<OrderDetail> orderDetails = this.detailMapper.selectByExample(example);
+                if (!CollectionUtils.isEmpty(orderDetails)) {
+                    order.setOrderDetails(orderDetails);
+                }
+
+                OrderStatus status = this.statusMapper.selectByPrimaryKey(order.getOrderId());
+                order.setStatus(status.getStatus());
+
+            });
+        }
+
+
+        return new PageResult<Order>(pageInfo.getTotal(), pageInfo.getPages(),orderList);
+    }
+
+    public PageResult<Order> loadOrderByStatus(OrderRequest request) {
+        //获取登录用户
+        UserInfo loginUser = LoginInterceptor.getLoginUser();
+
+        OrderStatus record = new OrderStatus();
+        record.setStatus(request.getStatus());
+
+        PageHelper.startPage(request.getPage(), request.getSize());
+
+        List<OrderStatus> orderStatuses = this.statusMapper.select(record);
+
+        List<Order> orderList = new ArrayList<>();
+        orderStatuses.forEach(orderStatus -> {
+            Order order = this.orderMapper.selectByPrimaryKey(orderStatus.getOrderId());
+
+            Example example = new Example(OrderDetail.class);
+
+            Example.Criteria criteria = example.createCriteria();
+            // 拼接查询条件
+            if (StringUtils.isNotBlank(request.getKey())) {
+                criteria.andLike("title", "%" + request.getKey() + "%");
+            }
+            criteria.andEqualTo("orderId", order.getOrderId());
+            List<OrderDetail> orderDetails = this.detailMapper.selectByExample(example);
+            if (!CollectionUtils.isEmpty(orderDetails)) {
+                order.setOrderDetails(orderDetails);
+            }
+            order.setStatus(orderStatus.getStatus());
+
+            orderList.add(order);
+        });
+
+        PageInfo<Order> pageInfo = new PageInfo<>(orderList);
+
+        return new PageResult<Order>(pageInfo.getTotal(), pageInfo.getPages(),orderList);
+    }
+
+    /**
+     * 查询订单状态
+     * @param orderId
+     * @return
+     */
+    public OrderStatus loadOrderStatusByOrderId(Long orderId) {
+
+        OrderStatus status = this.statusMapper.selectByPrimaryKey(orderId);
+
+        return status;
+    }
+
+    /**
+     * 根据id删除订单
+     * @param orderId
+     * @return
+     */
+    @Transactional
+    public Boolean deleteOrderByOrderId(Long orderId) {
+
+        try {
+            this.statusMapper.deleteByPrimaryKey(orderId);
+
+            OrderDetail record = new OrderDetail();
+            record.setOrderId(orderId);
+            this.detailMapper.delete(record);
+
+            this.orderMapper.deleteByPrimaryKey(orderId);
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

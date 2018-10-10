@@ -1,6 +1,10 @@
 package com.leyou.order.pojo;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +13,7 @@ import java.util.List;
 public class Order {
 
     @Id
+    @JsonSerialize(using = Long2StringSerizlizer.class)
     private Long orderId;// id
     @NotNull
     private Long totalPay;// 总金额

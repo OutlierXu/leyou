@@ -23,6 +23,7 @@
         <module name="leyou-upload" />
         <module name="leyou-user-interface" />
         <module name="leyou-user-service" />
+        <module name="leyou-zipkin" />
         <module name="leyoucart" />
       </profile>
     </annotationProcessing>
@@ -49,6 +50,7 @@
       <module name="leyou-user" target="1.8" />
       <module name="leyou-user-interface" target="1.8" />
       <module name="leyou-user-service" target="1.8" />
+      <module name="leyou-zipkin" target="1.8" />
       <module name="leyoucart" target="1.8" />
     </bytecodeTargetLevel>
   </component>

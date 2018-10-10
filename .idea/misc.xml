@@ -14,6 +14,7 @@
         <option value="$PROJECT_DIR$/leyou-auth/leyou-auth-common/pom.xml" />
         <option value="$PROJECT_DIR$/leyou-auth/pom.xml" />
         <option value="$PROJECT_DIR$/leyou-order/pom.xml" />
+        <option value="$PROJECT_DIR$/leyou-zipkin/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

@@ -20,6 +20,7 @@
       <module fileurl="file://$PROJECT_DIR$/leyou-user/leyou-user.iml" filepath="$PROJECT_DIR$/leyou-user/leyou-user.iml" />
       <module fileurl="file://$PROJECT_DIR$/leyou-user/leyou-user-interface/leyou-user-interface.iml" filepath="$PROJECT_DIR$/leyou-user/leyou-user-interface/leyou-user-interface.iml" />
       <module fileurl="file://$PROJECT_DIR$/leyou-user/leyou-user-service/leyou-user-service.iml" filepath="$PROJECT_DIR$/leyou-user/leyou-user-service/leyou-user-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leyou-zipkin/leyou-zipkin.iml" filepath="$PROJECT_DIR$/leyou-zipkin/leyou-zipkin.iml" />
       <module fileurl="file://$PROJECT_DIR$/leyou-auth/leyouauthcommon.iml" filepath="$PROJECT_DIR$/leyou-auth/leyouauthcommon.iml" />
     </modules>
   </component>
